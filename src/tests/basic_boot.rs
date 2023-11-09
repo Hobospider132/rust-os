@@ -7,25 +7,23 @@
 use core::panic::PanicInfo;
 use rust_os::println;
 
-/// This function is called on panic.
-#[cfg(not(test))]
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    println!("{}", info);
-    loop {}
-}
-
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    println!("Hello!");
-    #[cfg(test)]
     test_main();
+
     loop{}
 }
 
-#[cfg(test)]
+fn test_runner(tests: &[&dyn Fn()]) {
+    unimplemented!();
+}
+
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     rust_os::test_panic_handler(info)
 }
 
+#[test_case]
+fn test_println() {
+    println!("Hello World!")
+}
